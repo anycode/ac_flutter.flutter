@@ -48,11 +48,7 @@ class AppLocalizationState extends State<AppLocalization> {
     /// possible to call [Resources res = Resources.of(context);] in build()
     /// as it returns null in this widget. It works in other widgets in
     /// the subtree.
-    Resources.delegate.load(locale).then((_) {
-      setState(() {
-        _locale = locale;
-      });
-    });
+    Resources.delegate.load(locale).then((_) => setState(() => _locale = locale));
   }
 
   @override
