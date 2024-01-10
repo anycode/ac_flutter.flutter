@@ -3,8 +3,12 @@ library dev.anycode.flutter.framework;
 export 'package:ac_dart/ac_dart.dart';
 export 'package:ac_http_client/ac_http_client.dart';
 
+export 'src/debug/debug_service.dart';
+export 'src/extensions/alignment_ext.dart';
+export 'src/extensions/color_ext.dart';
 export 'src/extensions/daterange_ext.dart';
 export 'src/extensions/datetimerange_ext.dart';
+export 'src/extensions/google_map_latlng_ext.dart';
 export 'src/extensions/string_ext.dart';
 export 'src/res/resources.dart';
 export 'src/ui/app_connection.dart';
