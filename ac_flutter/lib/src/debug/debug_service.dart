@@ -30,6 +30,7 @@
 import 'dart:io';
 
 import 'package:ac_dart/ac_dart.dart';
+import 'package:flutter/widgets.dart';
 import 'package:logger/logger.dart';
 import 'package:media_storage/media_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -106,7 +107,7 @@ class DebugService {
       try {
         await MediaStorage.CreateDir(rootDir, dir);
       } catch (e) {
-        print('$e');
+        debugPrint('$e');
         return false;
       }
       for(final name in names) {
