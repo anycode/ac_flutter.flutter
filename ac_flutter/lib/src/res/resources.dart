@@ -33,9 +33,7 @@ abstract class Resources<STR extends ResStrings, COL extends ResColors, DIM exte
 
   Resources(this.locale);
 
-  static RES of<RES extends Resources>(BuildContext context) {
-    return Localizations.of<RES>(context, RES)!;
-  }
+  static RES of<RES extends Resources>(BuildContext context) => Localizations.of<RES>(context, RES)!;
 
   static ResLocalizationsDelegate get delegate => const ResLocalizationsDelegate<Resources>();
 
