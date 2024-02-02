@@ -23,7 +23,7 @@ abstract class Resources<STR extends ResStrings, COL extends ResColors, DIM exte
     Resources.creator = creator;
   }
 
-  Locale locale;
+  Locale _locale;
   abstract STR strings;
   abstract COL colors;
   abstract DIM dimens;
@@ -31,9 +31,26 @@ abstract class Resources<STR extends ResStrings, COL extends ResColors, DIM exte
   abstract STY styles;
   abstract LOC locales;
 
-  Resources(this.locale);
+  Resources(Locale locale) : _locale = locale;
 
-  static RES of<RES extends Resources>(BuildContext context) => Localizations.of<RES>(context, RES)!;
+  Locale get locale => _locale;
+  set locale(Locale locale) {
+    debugPrint('It\'s not advised to change `locale` directly in Resources. Use `AppLocalization.of(context).locale` instead, '
+        'which will reinit Resources with the new locale.');
+    _locale = locale;
+  }
+
+  static RES? maybeOf<RES extends Resources>(BuildContext context) => Localizations.of<RES>(context, RES);
+
+  static RES of<RES extends Resources>(BuildContext context) {
+    final res = Localizations.of<RES>(context, RES);
+    if (res == null) {
+      throw FlutterError('Resources requested with a context that does not contain a Resources localizations.\n'
+          'The context used must be that of a widget that is a descendant of a MaterialApp with a ResLocalizationDelegate '
+          'or its descendant used in MaterialApp `localizationsDelegates` list.');
+    }
+    return res;
+  }
 
   static ResLocalizationsDelegate get delegate => const ResLocalizationsDelegate<Resources>();
 
