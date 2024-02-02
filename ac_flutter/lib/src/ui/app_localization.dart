@@ -13,8 +13,20 @@ class AppLocalization extends StatefulWidget {
   @override
   AppLocalizationState createState() => AppLocalizationState();
 
-  static AppLocalizationState? of(BuildContext context) => context.findRootAncestorStateOfType<AppLocalizationState>();
+  static AppLocalizationState? maybeOf(BuildContext context) => context.findRootAncestorStateOfType<AppLocalizationState>();
+
+  static AppLocalizationState of(BuildContext context) {
+    final state = context.findRootAncestorStateOfType<AppLocalizationState>();
+    if (state == null) {
+      throw FlutterError(
+        'AppLocalization operation requested with a context that does not include a AppLocalization.\n'
+        'The context used must be that of a widget that is a descendant of a AppLocalization widget.',
+      );
+    }
+    return state;
+  }
 }
+
 
 class AppLocalizationState extends State<AppLocalization> {
   // Reinit resources on locale change
