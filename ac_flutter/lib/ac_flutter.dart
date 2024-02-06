@@ -14,6 +14,8 @@ export 'src/res/resources.dart';
 export 'src/ui/app_connection.dart';
 export 'src/ui/app_localization.dart';
 export 'src/ui/app_versioning.dart';
+export 'src/ui/widgets/loader.dart';
+export 'src/ui/widgets/loading_builder.dart';
 export 'src/ui/widgets/widget_builder.dart';
 export 'src/ui/debug/debug_view.dart';
 export 'src/ui/debug/tabbed_debugs_view.dart';
