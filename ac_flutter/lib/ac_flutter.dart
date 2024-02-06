@@ -1,4 +1,4 @@
-library dev.anycode.flutter.framework;
+library dev.anycode.flutter;
 
 export 'package:ac_dart/ac_dart.dart';
 
