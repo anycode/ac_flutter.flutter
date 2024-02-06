@@ -1,7 +1,6 @@
 library dev.anycode.flutter.framework;
 
 export 'package:ac_dart/ac_dart.dart';
-export 'package:ac_http_client/ac_http_client.dart';
 
 export 'src/debug/debug_service.dart';
 export 'src/extensions/alignment_ext.dart';
