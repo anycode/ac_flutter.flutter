@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ranges/ranges.dart' as ranges;
+import 'package:ac_ranges/ac_ranges.dart' as acr;
 
 extension DateTimeRangeExt on DateTimeRange {
 
-  ranges.DateRange asDateRange() {
-    return ranges.DateRange(start, end, startInclusive: true, endInclusive: true);
+  acr.DateRange asDateRange() {
+    return acr.DateRange(start, end, startInclusive: true, endInclusive: true);
   }
 
 }
