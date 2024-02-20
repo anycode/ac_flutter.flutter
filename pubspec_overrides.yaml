@@ -1,4 +1,8 @@
 dependency_overrides:
+  #ac_dart:
+  #  path: ../../../../dart/lib/ac_dart
+  #ac_ranges:
+  #  path: ../../../../dart/lib/ac_ranges
   #http: ^1.1.2
   meta: 1.10.0
   path: 1.9.0
