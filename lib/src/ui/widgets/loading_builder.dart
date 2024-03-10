@@ -35,7 +35,7 @@ class LoadingBuilder<T> extends StatelessWidget {
   final WidgetBuilder? emptyBuilder;
 
   /// [errorBuilder] is called when there is an error
-  final WidgetBuilder? errorBuilder;
+  final TypedWidgetBuilder? errorBuilder;
 
   const LoadingBuilder({
     super.key,
@@ -127,7 +127,7 @@ class SliverLoadingBuilder<T> extends StatelessWidget {
 
   /// [errorBuilder] is called when there is an error
   /// Must return a [Sliver]
-  final WidgetBuilder? errorBuilder;
+  final TypedWidgetBuilder? errorBuilder;
 
   const SliverLoadingBuilder({
     super.key,
@@ -206,7 +206,7 @@ class _FutureBuilder<T> extends StatelessWidget {
   final TypedWidgetBuilder<T> builder;
   final WidgetBuilder? loadingBuilder;
   final WidgetBuilder? emptyBuilder;
-  final WidgetBuilder? errorBuilder;
+  final TypedWidgetBuilder? errorBuilder;
   final bool inSlivers;
 
   const _FutureBuilder({
@@ -228,7 +228,7 @@ class _FutureBuilder<T> extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return seed != null ? builder(context, seed as T) : loadingBuilder?.call(context) ?? _slivered(const Center(child: Loader()));
         } else if (snapshot.hasError) {
-          return errorBuilder?.call(context) ?? _slivered(SizedBox(height: 128, child: _ErrorWidget(snapshot.error!)));
+          return errorBuilder?.call(context, snapshot.error) ?? _slivered(SizedBox(height: 128, child: _ErrorWidget(snapshot.error!)));
         } else if (snapshot.hasData) {
           if (snapshot.data is Map && (snapshot.data as Map).isEmpty || snapshot.data is List && (snapshot.data as List).isEmpty) {
             return emptyBuilder?.call(context) ?? _slivered(Container());
@@ -259,7 +259,7 @@ class _StreamBuilder<T> extends StatelessWidget {
   final TypedWidgetBuilder<T> builder;
   final WidgetBuilder? loadingBuilder;
   final WidgetBuilder? emptyBuilder;
-  final WidgetBuilder? errorBuilder;
+  final TypedWidgetBuilder? errorBuilder;
   final bool? inSlivers;
 
   const _StreamBuilder(
@@ -280,7 +280,7 @@ class _StreamBuilder<T> extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return seed != null ? builder(context, seed as T) : loadingBuilder?.call(context) ?? _slivered(const Center(child: Loader()));
         } else if (snapshot.hasError) {
-          return errorBuilder?.call(context) ?? _slivered(SizedBox(height: 128, child: _ErrorWidget(snapshot.error!)));
+          return errorBuilder?.call(context, snapshot.error) ?? _slivered(SizedBox(height: 128, child: _ErrorWidget(snapshot.error!)));
         } else if (snapshot.hasData) {
           if (snapshot.data is Map && (snapshot.data as Map).isEmpty || snapshot.data is List && (snapshot.data as List).isEmpty) {
             return emptyBuilder?.call(context) ?? _slivered(Container());
