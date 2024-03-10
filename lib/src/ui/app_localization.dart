@@ -6,8 +6,9 @@ import '../res/resources.dart';
 class AppLocalization extends StatefulWidget {
   final Widget? child;
   final Function(BuildContext context, Locale? locale, Widget? child)? builder;
+  final Locale? defaultLocale;
 
-  const AppLocalization({this.child, this.builder, super.key})
+  const AppLocalization({this.child, this.builder, this.defaultLocale, super.key})
       : assert(builder != null || child != null);
 
   @override
@@ -50,8 +51,7 @@ class AppLocalizationState extends State<AppLocalization> {
     // init Resource with saved/default locale
     SharedPreferences.getInstance().then((prefs) {
       final lc = prefs.getString('lang');
-      final locale = ResLocales.byLangCode(lc);
-      _loadResources(locale);
+      _loadResources(lc != null ? ResLocales.byLangCode(lc) : widget.defaultLocale ?? ResLocales.defaultLocale);
     });
   }
 
