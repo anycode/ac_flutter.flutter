@@ -103,7 +103,7 @@ class DebugService {
   final List<String> _names;
 
   /// Name of root media directory used for storing logs. Should be one of
-  /// [MediaStorage] directories, default is [MediaStorage.DIRECTORY_DOWNLOADS]
+  /// [MediaStorage] directories, default is [MediaStorage.directoryDownloads]
   String get root => _root;
   final String _root;
 
@@ -148,7 +148,7 @@ class DebugService {
     String? path,
     Level? level,
     bool initialize = false,
-  })  : _root = root ?? MediaStorage.DIRECTORY_DOWNLOADS,
+  })  : _root = root ?? MediaStorage.directoryDownloads,
         _level = level,
         _path = path ?? defaultPath,
         _names = names {
@@ -193,7 +193,7 @@ class DebugService {
     final rootDir = await MediaStorage.getExternalStoragePublicDirectory(_root);
     if (await MediaStorage.getRequestStoragePermission()) {
       try {
-        await MediaStorage.CreateDir(rootDir, dir);
+        await MediaStorage.createDirectory(rootDir, dir);
       } catch (e) {
         debugPrint('$e');
         _initialized = true;
