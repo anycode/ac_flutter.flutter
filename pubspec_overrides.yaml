@@ -4,5 +4,7 @@ dependency_overrides:
   #ac_ranges:
   #  path: ../../../../dart/lib/ac_ranges
   #http: ^1.1.2
+  #media_storage: #0.0.1
+  #  path: ../../lib/media_storage
   meta: 1.10.0
   path: 1.9.0
