@@ -2,6 +2,7 @@ library dev.anycode.flutter;
 
 export 'package:ac_dart/ac_dart.dart';
 
+export 'src/converter/color_converter.dart';
 export 'src/debug/debug_service.dart';
 export 'src/extensions/alignment_ext.dart';
 export 'src/extensions/color_ext.dart';
