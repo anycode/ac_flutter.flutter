@@ -30,6 +30,7 @@ dependencies:
   media_storage: #^0.0.1
     git:
       url: https://github.com/anycode/media_storage.flutter.git
+      ref: v0.1.2
   package_info_plus: ^6.0.0
   rxdart: ^0.27.7
   share_plus: ^8.0.2
