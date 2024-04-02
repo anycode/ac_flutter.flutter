@@ -1,10 +1,23 @@
 dependency_overrides:
-  #ac_dart:
-  #  path: ../../../../dart/lib/ac_dart
-  #ac_ranges:
-  #  path: ../../../../dart/lib/ac_ranges
-  #http: ^1.1.2
-  #media_storage: #0.0.1
-  #  path: ../../lib/media_storage
+#  ac_dart:
+#    git:
+#      url: https://github.com/anycode/ac_dart.dart.git
+#      ref: v0.1.7
+#  #  path: ../../../../dart/lib/ac_dart
+#  ac_ranges:
+#    git:
+#      url: https://github.com/anycode/ac_ranges.dart.git
+#      ref: v3.0.8
+#  #  path: ../../../../dart/lib/ac_ranges
+#  http: ^1.1.2
+#  media_storage: #0.0.1
+#  git:
+#    url: https://github.com/anycode/media_storage.flutter.git
+#    ref: v0.1.2
+#    #path: ../../lib/media_storage
+#  version_banner: #^0.2.1
+#    git:
+#      url: https://github.com/anycode/flutter_version_banner
+#      ref: v2.0.2
   meta: 1.10.0
-  path: 1.9.0
+#  path: 1.9.0
