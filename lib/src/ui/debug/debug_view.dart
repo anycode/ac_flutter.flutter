@@ -22,7 +22,7 @@ class _DebugViewState extends State<DebugView> {
       children: [
         Expanded(
           child: FutureBuilder(
-              future: widget.debugLogger.output!.content,
+              future: widget.debugLogger.output.content,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(
@@ -35,10 +35,10 @@ class _DebugViewState extends State<DebugView> {
               }),
         ),
         DebugBottomBar(
-          onShare: () async => Share.shareXFiles(widget.debugLogger.output!.xFiles),
-          onCopy: () async => FlutterClipboard.copy((await widget.debugLogger.output!.content).toString()),
+          onShare: () async => Share.shareXFiles(widget.debugLogger.output.xFiles),
+          onCopy: () async => FlutterClipboard.copy((await widget.debugLogger.output.content).toString()),
           onDelete: () async {
-            widget.debugLogger.output!.clearLog();
+            widget.debugLogger.output.clearLog();
             setState(() {});
           },
         ),
