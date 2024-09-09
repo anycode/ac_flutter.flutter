@@ -1,3 +1,7 @@
+## 0.1.6
+
+- Updated dependencies
+
 ## 0.1.5
 
 - ColorConverter moved from `ac_dart`

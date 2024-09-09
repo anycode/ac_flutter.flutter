@@ -1,9 +1,9 @@
 dependency_overrides:
-  ac_dart:
+#  ac_dart:
 #    git:
 #      url: https://github.com/anycode/ac_dart.dart.git
 #      ref: v0.1.7
-    path: ../../../dart/lib/ac_dart
+#    path: ../../../dart/lib/ac_dart
 #  ac_ranges:
 #    git:
 #      url: https://github.com/anycode/ac_ranges.dart.git

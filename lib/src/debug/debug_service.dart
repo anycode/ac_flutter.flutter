@@ -3,10 +3,11 @@ import 'dart:io';
 
 import 'package:ac_dart/ac_dart.dart';
 import 'package:ac_flutter/ac_flutter.dart';
-import 'package:flutter/widgets.dart';
 import 'package:logger/logger.dart';
 import 'package:media_storage/media_storage.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:ac_flutter/src/platform.dart' as platform;
 
 class DebugService {
   static const defaultPath = '{pkg}/files/logs';
@@ -190,21 +191,19 @@ class DebugService {
       dir = _path;
     }
 
-    final rootDir = await MediaStorage.getExternalStoragePublicDirectory(_root);
-    if (await MediaStorage.getRequestStoragePermission()) {
-      try {
-        await MediaStorage.createDirectory(rootDir, dir);
-      } catch (e) {
-        debugPrint('$e');
-        _initialized = true;
-        return false;
-      }
+    final docDir = await getApplicationDocumentsDirectory();
+    final logPath = '${docDir.path}/$dir';
+    Directory(logPath).createSync(recursive: true);
+    //final logPath = await platform.getLogPath(_root, dir);
+    if (logPath != null) {
       for (final name in _names) {
-        final file = File('$rootDir/$dir/$name.log');
+        final file = File('$logPath/$name.log');
+        final mfo = MultiFileOutput(file: file);
+        await mfo.init();
         _loggers[name] = DebugLogger(
           name: name,
           level: _level,
-          output: MultiFileOutput(file: file),
+          output: mfo,
         );
       }
       _initialized = true;

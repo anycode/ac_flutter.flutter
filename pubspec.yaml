@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   ac_dart:
-    version: ^0.1.7
+    version: ^0.1.10
     hosted: https://pub.anycode.dev
   ac_ranges:
     version: ^3.0.8
