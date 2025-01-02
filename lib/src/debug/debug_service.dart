@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:ac_dart/ac_dart.dart';
 import 'package:ac_flutter/ac_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 import 'package:media_storage/media_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:ac_flutter/src/platform.dart' as platform;
 
 class DebugService {
   static const defaultPath = '{pkg}/files/logs';
@@ -149,7 +149,7 @@ class DebugService {
     String? path,
     Level? level,
     bool initialize = false,
-  })  : _root = root ?? MediaStorage.directoryDownloads,
+  }) : _root = root ?? MediaStorage.directoryDownloads,
         _level = level,
         _path = path ?? defaultPath,
         _names = names {
@@ -169,20 +169,28 @@ class DebugService {
     Level? level,
     bool initialize = false,
   }) : this.named(
-          names: [_appLoggerName, _apiLoggerName, _performanceLoggerName, _errorLoggerName],
-          root: root,
-          path: path,
-          level: level,
-          initialize: initialize,
-        );
+    names: [_appLoggerName, _apiLoggerName, _performanceLoggerName, _errorLoggerName],
+    root: root,
+    path: path,
+    level: level,
+    initialize: initialize,
+  );
 
   /// Initialize loggers
   ///
-  Future<bool> init() async {
+  Future<bool> init() {
     if (_initialized) {
       // already initialized
-      return true;
+      return Future.value(true);
     }
+    if (kIsWeb) {
+      return _initWeb();
+    } else {
+      return _initNative();
+    }
+  }
+
+  Future<bool> _initNative() async {
     String dir;
     if (_path.contains('{pkg}')) {
       var pkg = await PackageInfo.fromPlatform();
@@ -195,22 +203,30 @@ class DebugService {
     final logPath = '${docDir.path}/$dir';
     Directory(logPath).createSync(recursive: true);
     //final logPath = await platform.getLogPath(_root, dir);
-    if (logPath != null) {
-      for (final name in _names) {
-        final file = File('$logPath/$name.log');
-        final mfo = MultiFileOutput(file: file);
-        await mfo.init();
-        _loggers[name] = DebugLogger(
-          name: name,
-          level: _level,
-          output: mfo,
-        );
-      }
-      _initialized = true;
-      return true;
-    } else {
-      _initialized = true;
-      return false;
+    for (final name in _names) {
+      final file = File('$logPath/$name.log');
+      final mfo = MultiFileOutput(file: file);
+      await mfo.init();
+      _loggers[name] = DebugLogger(
+        name: name,
+        level: _level,
+        output: mfo,
+      );
     }
+    _initialized = true;
+    return true;
   }
+
+  Future<bool> _initWeb() async {
+    // log to console only
+    for (final name in _names) {
+      _loggers[name] = DebugLogger.web(
+        name: name,
+        level: _level,
+      );
+    }
+    _initialized = true;
+    return true;
+  }
+
 }
