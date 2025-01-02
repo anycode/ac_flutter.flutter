@@ -220,7 +220,7 @@ class DebugService {
   Future<bool> _initWeb() async {
     // log to console only
     for (final name in _names) {
-      _loggers[name] = DebugLogger.web(
+      _loggers[name] = DebugLogger.console(
         name: name,
         level: _level,
       );
