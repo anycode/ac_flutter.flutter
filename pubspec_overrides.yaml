@@ -20,5 +20,5 @@ dependency_overrides:
 #    git:
 #      url: https://github.com/anycode/flutter_version_banner
 #      ref: v2.0.2
-  meta: 1.10.0
+#  meta: 1.10.0
 #  path: 1.9.0
