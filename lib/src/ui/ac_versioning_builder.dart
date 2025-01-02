@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:version_banner/version_banner.dart';
 
+import 'widgets/ac_loading_builder.dart';
 import 'widgets/ac_widget_builder.dart';
 
 /// Callback builder which is called when current app version is lower than
 /// minimal (required) version
-typedef OutdatedAppBuilder = Widget Function(BuildContext context, int appVersion, int minVersion);
+typedef OutdatedAppWidgetBuilder = Widget Function(BuildContext context, int appVersion, int minVersion);
 
-/// [AppVersioning] is deprecated since 0.2.0 and will be removed in next version
-@Deprecated('Use [AcVersioningBuilder] instead. [AppVersioning] will be removed in next version')
-class AppVersioning extends StatefulWidget {
+class AcVersioningBuilder extends StatefulWidget {
   /// Builder called when app version meets minimal version
   final AcWidgetBuilder? builder;
 
@@ -23,7 +22,7 @@ class AppVersioning extends StatefulWidget {
   final Widget? child;
 
   /// [outdatedAppBuilder] is called when app is outdated
-  final OutdatedAppBuilder outdatedAppBuilder;
+  final OutdatedAppWidgetBuilder outdatedAppBuilder;
 
   /// [errorBuilder] is called when there is an error, if not specified
   /// default Flutter [ErrorWidget] is used
@@ -41,7 +40,7 @@ class AppVersioning extends StatefulWidget {
   /// By default ['devel','test']
   final List<String>? showVersionBannerForExtensions;
 
-  const AppVersioning({
+  const AcVersioningBuilder({
     this.builder,
     this.child,
     required this.outdatedAppBuilder,
@@ -53,15 +52,18 @@ class AppVersioning extends StatefulWidget {
   }) : assert(builder != null || child != null, 'builder od child must be specified for AppVersioning');
 
   @override
-  AppVersioningState createState() => AppVersioningState();
+  AcVersioningBuilderState createState() => AcVersioningBuilderState();
 }
 
-class AppVersioningState extends State<AppVersioning> with WidgetsBindingObserver {
+class AcVersioningBuilderState extends State<AcVersioningBuilder> with WidgetsBindingObserver {
   late StreamController<int> _versions;
+  late StreamController<int> _minVersion;
 
   @override
   void initState() {
     _versions = StreamController<int>();
+    _minVersion = StreamController<int>();
+    _minVersion.addStream(widget.minVersionStream);
     WidgetsBinding.instance.addObserver(this);
     _getVersion();
     super.initState();
@@ -70,32 +72,23 @@ class AppVersioningState extends State<AppVersioning> with WidgetsBindingObserve
   @override
   void dispose() {
     _versions.close();
+    _minVersion.close();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<int>(
-        stream: widget.minVersionStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return widget.errorBuilder?.call(context) ?? ErrorWidget.withDetails(message: 'Error reading minVersionStream');
-          }
-          if (!snapshot.hasData) {
-            return widget.loadingBuilder?.call(context) ?? Container();
-          }
-          final minVersion = snapshot.data!;
-          return StreamBuilder<int>(
+    return AcLoadingBuilder<int>(
+        stream: _minVersion.stream,
+        errorBuilder: (context, error) => widget.errorBuilder?.call(context) ?? ErrorWidget.withDetails(message: 'Error reading minVersionStream'),
+        emptyBuilder: (context) => widget.loadingBuilder?.call(context) ?? Container(),
+        builder: (context, minVersion) {
+          return AcLoadingBuilder<int>(
             stream: _versions.stream,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return widget.errorBuilder?.call(context) ?? ErrorWidget.withDetails(message: 'Error reading appVersionStream');
-              }
-              if (!snapshot.hasData) {
-                return widget.loadingBuilder?.call(context) ?? Container();
-              }
-              final currentVersion = snapshot.data!;
+            errorBuilder: (context, error) => widget.errorBuilder?.call(context) ?? ErrorWidget.withDetails(message: 'Error reading appVersionStream'),
+            emptyBuilder: (context) => widget.loadingBuilder?.call(context) ?? Container(),
+            builder: (context, currentVersion) {
               return VersionBanner(
                 packageExtensions: widget.showVersionBannerForExtensions ?? const ['devel', 'test'],
                 location: BannerLocation.bottomStart,

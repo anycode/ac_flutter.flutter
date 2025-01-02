@@ -3,6 +3,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../res/resources.dart';
 
+/// [AppLocalization] is deprecated since 0.2.0 and will be removed in next version.
+/// User [AcResourcesBuilder] instead, which returns instance of AcResources in the callback method. To get
+/// locale, call `resources.locale`.
+@Deprecated('Use [AcResourcesBuilder] instead. [AppLocalization] will be removed in next version.')
 class AppLocalization extends StatefulWidget {
   final Widget? child;
   final Function(BuildContext context, Locale? locale, Widget? child)? builder;

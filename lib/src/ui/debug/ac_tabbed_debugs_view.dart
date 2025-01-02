@@ -1,20 +1,18 @@
 import 'package:ac_dart/ac_dart.dart';
 import 'package:flutter/material.dart';
 
-import 'debug_view.dart';
+import 'ac_debug_view.dart';
 
-/// [TabbedDebugsView] is deprecated since 0.2.0 and will be removed in next version.
-@Deprecated('Use [AcTabbedDebugsView] instead. [TabbedDebugsView] will be removed in next version.')
-class TabbedDebugsView extends StatefulWidget {
+class AcTabbedDebugsView extends StatefulWidget {
   final List<DebugLogger> debugLoggers;
 
-  const TabbedDebugsView({super.key, required this.debugLoggers});
+  const AcTabbedDebugsView({super.key, required this.debugLoggers});
 
   @override
-  State<TabbedDebugsView> createState() => _TabbedDebugsViewState();
+  State<AcTabbedDebugsView> createState() => _AcTabbedDebugsViewState();
 }
 
-class _TabbedDebugsViewState extends State<TabbedDebugsView> with SingleTickerProviderStateMixin {
+class _AcTabbedDebugsViewState extends State<AcTabbedDebugsView> with SingleTickerProviderStateMixin {
   TabController? tabController;
 
   @override
@@ -34,7 +32,7 @@ class _TabbedDebugsViewState extends State<TabbedDebugsView> with SingleTickerPr
   @override
   Widget build(BuildContext context) {
     return widget.debugLoggers.length == 1
-        ? DebugView(debugLogger: widget.debugLoggers[0])
+        ? AcDebugView(debugLogger: widget.debugLoggers[0])
         : Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -47,7 +45,7 @@ class _TabbedDebugsViewState extends State<TabbedDebugsView> with SingleTickerPr
                 child: TabBarView(
                   controller: tabController,
                   physics: const NeverScrollableScrollPhysics(),
-                  children: widget.debugLoggers.map((ds) => DebugView(debugLogger: ds)).toList(),
+                  children: widget.debugLoggers.map((ds) => AcDebugView(debugLogger: ds)).toList(),
                 ),
               ),
             ],

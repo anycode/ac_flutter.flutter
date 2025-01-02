@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
-/// [DebugBottomBar] is deprecated since 0.2.0 and will be removed in next version.
-@Deprecated('Use [AcDebugBottomBar] instead. [DebugBottomBar] will be removed in next version.')
-class DebugBottomBar extends StatelessWidget {
+class AcDebugBottomBar extends StatelessWidget {
   final VoidCallback? onShare;
   final VoidCallback? onCopy;
   final VoidCallback? onDelete;
 
-  const DebugBottomBar({super.key, this.onShare, this.onCopy, this.onDelete});
+  const AcDebugBottomBar({super.key, this.onShare, this.onCopy, this.onDelete});
 
   @override
   Widget build(BuildContext context) {

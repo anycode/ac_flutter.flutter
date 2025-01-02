@@ -5,6 +5,8 @@ import 'package:share_plus/share_plus.dart';
 
 import 'debug_bottom_bar.dart';
 
+/// [DebugView] is deprecated since 0.2.0 and will be removed in next version.
+@Deprecated('Use [AcDebugView] instead. [DebugView] will be removed in next version.')
 class DebugView extends StatefulWidget {
   final DebugLogger debugLogger;
 
@@ -22,7 +24,7 @@ class _DebugViewState extends State<DebugView> {
       children: [
         Expanded(
           child: FutureBuilder(
-              future: widget.debugLogger.output.content,
+              future: widget.debugLogger.output!.content,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(
@@ -35,10 +37,10 @@ class _DebugViewState extends State<DebugView> {
               }),
         ),
         DebugBottomBar(
-          onShare: () async => Share.shareXFiles(widget.debugLogger.output.xFiles),
-          onCopy: () async => FlutterClipboard.copy((await widget.debugLogger.output.content).toString()),
+          onShare: () async => Share.shareXFiles(widget.debugLogger.output!.xFiles),
+          onCopy: () async => FlutterClipboard.copy((await widget.debugLogger.output!.content).toString()),
           onDelete: () async {
-            widget.debugLogger.output.clearLog();
+            widget.debugLogger.output!.clearLog();
             setState(() {});
           },
         ),

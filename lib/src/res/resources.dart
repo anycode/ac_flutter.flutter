@@ -10,6 +10,8 @@ part 'styles.dart';
 
 typedef ResourceCreator<T> = T Function(Locale locale);
 
+/// [Resources] is deprecated since 0.2.0 and will be removed in next version.
+@Deprecated('Use [AcResources] instead. [Resources] is deprecated will be removed in next version.')
 abstract class Resources<STR extends ResStrings, COL extends ResColors, DIM extends ResDimens, AST extends ResAssets, STY extends ResStyles,
                         LOC extends ResLocales> {
   static Future<bool> Function(String localeName)? initializeMessages;

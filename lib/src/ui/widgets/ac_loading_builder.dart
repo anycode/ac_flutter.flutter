@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'ac_loader.dart';
 import 'ac_widget_builder.dart';
-import 'loader.dart';
 
 typedef _Stream<T> = Stream<T> Function(T fetched);
 
-/// [LoadingBuilder] is deprecated since 0.2.0 and will be removed in next version.
-/// [LoadingBuilder] allow fetching data asynchronously from a [Future]<T> or a [Stream]<T>.
+/// [AcLoadingBuilder] allow fetching data asynchronously from a [Future]<T> or a [Stream]<T>.
 /// When [future] is specified, [stream] must be null or a function which takes a
 /// value obtained from [future] and returns a [Stream]<T>.
 /// When [future] is null, [stream] must be a [Stream]<T>.
-/// Use [SliverLoadingBuilder] if you need to use it in slivers.
-@Deprecated('Use [AcLoadingBuilder] instead. [LoadingBuilder] will be removed in next version.')
-class LoadingBuilder<T> extends StatelessWidget {
+/// Use [AcSliverLoadingBuilder] if you need to use it in slivers.
+class AcLoadingBuilder<T> extends StatelessWidget {
   /// [future] is a [Future]<T> whose value is passed to [builder] (if [stream] is null) or as
   /// a seed value to [stream] which must be [Stream<T> Function(T seed)]
   final Future<T>? future;
@@ -39,7 +37,7 @@ class LoadingBuilder<T> extends StatelessWidget {
   /// [errorBuilder] is called when there is an error
   final TypedWidgetBuilder? errorBuilder;
 
-  const LoadingBuilder({
+  const AcLoadingBuilder({
     super.key,
     this.future,
     this.stream,
@@ -96,12 +94,12 @@ class LoadingBuilder<T> extends StatelessWidget {
   }
 }
 
-/// [SliverLoadingBuilder] allow fetching data asynchronously from a [Future]<T> or a [Stream]<T>.
-/// It has the very same functionality as [LoadingBuilder] but it's suitable for use in slivers.
+/// [AcSliverLoadingBuilder] allow fetching data asynchronously from a [Future]<T> or a [Stream]<T>.
+/// It has the very same functionality as [AcLoadingBuilder] but it's suitable for use in slivers.
 /// When [future] is specified, [stream] must be null or a function which takes a
 /// value obtained from [future] and returns a [Stream]<T>.
 /// When [future] is null, [stream] must be a [Stream]<T>.
-class SliverLoadingBuilder<T> extends StatelessWidget {
+class AcSliverLoadingBuilder<T> extends StatelessWidget {
   /// [future] is a [Future]<T> whose value is passed to [builder] (if [stream] is null) or as
   /// a seed value to [stream] which must be [Stream<T> Function(T seed)]
   final Future<T>? future;
@@ -131,7 +129,7 @@ class SliverLoadingBuilder<T> extends StatelessWidget {
   /// Must return a [Sliver]
   final TypedWidgetBuilder? errorBuilder;
 
-  const SliverLoadingBuilder({
+  const AcSliverLoadingBuilder({
     super.key,
     this.future,
     this.stream,
@@ -228,7 +226,7 @@ class _FutureBuilder<T> extends StatelessWidget {
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return seed != null ? builder(context, seed as T) : loadingBuilder?.call(context) ?? _slivered(const Center(child: Loader()));
+          return seed != null ? builder(context, seed as T) : loadingBuilder?.call(context) ?? _slivered(const Center(child: AcLoader()));
         } else if (snapshot.hasError) {
           return errorBuilder?.call(context, snapshot.error) ?? _slivered(SizedBox(height: 128, child: _ErrorWidget(snapshot.error!)));
         } else if (snapshot.hasData) {
@@ -244,7 +242,7 @@ class _FutureBuilder<T> extends StatelessWidget {
             return emptyBuilder?.call(context) ?? _slivered(Container());
           }
         } else {
-          return seed != null ? builder(context, seed as T) : loadingBuilder?.call(context) ?? _slivered(const Center(child: Loader()));
+          return seed != null ? builder(context, seed as T) : loadingBuilder?.call(context) ?? _slivered(const Center(child: AcLoader()));
         }
       },
     );
@@ -280,7 +278,7 @@ class _StreamBuilder<T> extends StatelessWidget {
       stream: seed != null ? stream.startWith(seed as T) : stream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return seed != null ? builder(context, seed as T) : loadingBuilder?.call(context) ?? _slivered(const Center(child: Loader()));
+          return seed != null ? builder(context, seed as T) : loadingBuilder?.call(context) ?? _slivered(const Center(child: AcLoader()));
         } else if (snapshot.hasError) {
           return errorBuilder?.call(context, snapshot.error) ?? _slivered(SizedBox(height: 128, child: _ErrorWidget(snapshot.error!)));
         } else if (snapshot.hasData) {
@@ -296,7 +294,7 @@ class _StreamBuilder<T> extends StatelessWidget {
             return emptyBuilder?.call(context) ?? _slivered(Container());
           }
         } else {
-          return loadingBuilder?.call(context) ?? _slivered(const Center(child: Loader()));
+          return loadingBuilder?.call(context) ?? _slivered(const Center(child: AcLoader()));
         }
       },
     );

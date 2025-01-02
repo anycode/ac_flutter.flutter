@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 typedef AppConnectionBuilder = Widget Function(BuildContext context, ConnectivityStatus? status);
 
+/// [AppConnection] is deprecated since 0.2.0 and will be removed in next version.
+@Deprecated('Use [AcConnectionBuilder] instead. [AppConnection] will be removed in next version.')
 class AppConnection extends StatelessWidget {
   final AppConnectionBuilder builder;
   final AppConnectionBuilder errorBuilder;
