@@ -1,3 +1,8 @@
+## 0.2.1
+
+- Common buttons (wrappers for Flutter buttons)
+- Theme switching widgets - buttons, switch, toggle buttons
+
 ## 0.2.0
 
 - Updated dependencies
