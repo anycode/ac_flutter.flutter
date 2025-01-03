@@ -1,5 +1,3 @@
-library dev.anycode.flutter;
-
 export 'package:ac_dart/ac_dart.dart';
 
 export 'src/converter/color_converter.dart';
@@ -22,12 +20,3 @@ export 'src/ui/widgets/ac_widget_builder.dart';
 export 'src/ui/widgets/buttons/buttons.dart';
 export 'src/ui/debug/ac_debug_view.dart';
 export 'src/ui/debug/ac_tabbed_debugs_view.dart';
-/// deprecated
-export 'src/res/resources.dart';
-export 'src/ui/app_connection.dart';
-export 'src/ui/app_localization.dart';
-export 'src/ui/app_versioning.dart';
-export 'src/ui/widgets/loader.dart';
-export 'src/ui/widgets/loading_builder.dart';
-export 'src/ui/debug/debug_view.dart';
-export 'src/ui/debug/tabbed_debugs_view.dart';

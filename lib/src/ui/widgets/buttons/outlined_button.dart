@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../extensions/alignment_ext.dart';
-import '../../../res/resources.dart';
 
 class AcOutlinedButton extends MaterialButton {
   final String? title;

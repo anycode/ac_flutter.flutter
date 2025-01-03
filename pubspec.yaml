@@ -1,6 +1,6 @@
 name: ac_flutter
 description: AnyCode Flutter Framework with reusable widgets, resources and extensions
-version: 0.2.1
+version: 0.2.2
 homepage: https://github.com/anycode/flutter_lib
 repository: https://github.com/anycode/flutter_lib/ac_flutter
 publish_to: https://pub.anycode.dev

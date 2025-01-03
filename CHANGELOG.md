@@ -1,3 +1,7 @@
+## 0.2.2
+
+- Removed deprecated widgets
+
 ## 0.2.1
 
 - Common buttons (wrappers for Flutter buttons)

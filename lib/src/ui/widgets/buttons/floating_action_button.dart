@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../res/resources.dart';
-
 class AcFloatingActionButton extends StatelessWidget {
   final String? label;
   final Widget? icon;
