@@ -10,34 +10,35 @@ class AcThemeBuilder extends StatefulWidget {
   _AcThemeBuilderState createState() => _AcThemeBuilderState();
 
   static _AcThemeBuilderState of(BuildContext context, {bool rootBuilder = false}) {
-    final themeBuilder = rootBuilder
-        ? context.findRootAncestorStateOfType<_AcThemeBuilderState>()
-        : context.findAncestorStateOfType<_AcThemeBuilderState>();
+    final themeBuilder =
+        rootBuilder ? context.findRootAncestorStateOfType<_AcThemeBuilderState>() : context.findAncestorStateOfType<_AcThemeBuilderState>();
 
     assert(() {
       if (themeBuilder == null) {
         throw FlutterError(
           'ThemeBuilder operation requested with a context that does not include a ThemeBuilder.\n'
-              'The context used to get a ThemeBuilder must contain such widget.',
+          'The context used to get a ThemeBuilder must contain such widget.',
         );
       }
       return true;
     }());
     return themeBuilder!;
   }
-
-
 }
 
 class _AcThemeBuilderState extends State<AcThemeBuilder> {
   ThemeMode _themeMode = ThemeMode.system;
+
   ThemeMode get themeMode => _themeMode;
+
   set themeMode(ThemeMode mode) {
     _themeMode = mode;
     _themeModeStream.add(mode);
   }
+
   final _themeModeStream = BehaviorSubject<ThemeMode>()..add(ThemeMode.system);
-  //BehaviorSubject<ThemeMode> get themeModeStream => _themeModeStream;
+
+  BehaviorSubject<ThemeMode> get themeModeStream => _themeModeStream;
 
   @override
   Widget build(BuildContext context) {
@@ -53,3 +54,4 @@ class _AcThemeBuilderState extends State<AcThemeBuilder> {
     );
   }
 }
+
