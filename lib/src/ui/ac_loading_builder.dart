@@ -12,9 +12,9 @@ typedef _Stream<T> = Stream<T> Function(T fetched);
 /// When [future] is null, [stream] must be a [Stream]<T>.
 /// Use [AcSliverLoadingBuilder] if you need to use it in slivers.
 class AcLoadingBuilder<T> extends StatelessWidget {
-  /// [future] is a [Future]<T> whose value is passed to [builder] (if [stream] is null) or as
+  /// [future] is a [Future]<T?> whose value is passed to [builder] (if [stream] is null) or as
   /// a seed value to [stream] which must be [Stream<T> Function(T seed)]
-  final Future<T>? future;
+  final Future<T?>? future;
 
   /// [stream] is either a [Stream]<T> (if [future] is null) or a [Stream<T> Function(T seed)]
   /// seeded by a value from [future] (if [future] is not null)
@@ -46,19 +46,19 @@ class AcLoadingBuilder<T> extends StatelessWidget {
     this.loadingBuilder,
     this.emptyBuilder,
     this.errorBuilder,
-  })  : assert((future != null && (stream == null || stream is _Stream<T>)) || (future == null && stream is Stream<T>),
-            'either `future` or `stream` must be set, when `future` is set `stream` must be `null` or `Stream<T> Function(T? seed)`'),
+  })  : assert((future != null && (stream == null || stream is _Stream<T?>)) || (future == null && stream is Stream<T?>),
+            'either `future` or `stream` must be set, when `future` is set `stream` must be `null` or `Stream<$T> Function($T? seed)`'),
         super();
 
   @override
   Widget build(BuildContext context) {
-    if (future != null && stream != null && stream is _Stream<T>) {
+    if (future != null && stream != null && stream is _Stream<T?>) {
       // both Future and Stream are specified, first call seeded FutureBuilder to fetch a value which is then seeded to a stream
       return _FutureBuilder<T>(
         future: future!,
         seed: seed,
         builder: (context, fetched) => _StreamBuilder<T>(
-          stream: (stream! as _Stream<T>)(fetched),
+          stream: (stream! as _Stream<T?>)(fetched),
           seed: fetched,
           builder: builder,
           loadingBuilder: loadingBuilder,
@@ -82,7 +82,7 @@ class AcLoadingBuilder<T> extends StatelessWidget {
       );
     } else {
       return _StreamBuilder<T>(
-        stream: stream! as Stream<T>,
+        stream: stream! as Stream<T?>,
         builder: builder,
         loadingBuilder: loadingBuilder,
         emptyBuilder: emptyBuilder,
@@ -201,7 +201,7 @@ class _ErrorWidget extends ErrorWidget {
 }
 
 class _FutureBuilder<T> extends StatelessWidget {
-  final Future<T> future;
+  final Future<T?> future;
   final T? seed;
   final TypedWidgetBuilder<T> builder;
   final WidgetBuilder? loadingBuilder;
@@ -222,7 +222,7 @@ class _FutureBuilder<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<T>(
+    return FutureBuilder<T?>(
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -230,7 +230,7 @@ class _FutureBuilder<T> extends StatelessWidget {
         } else if (snapshot.hasError) {
           return errorBuilder?.call(context, snapshot.error) ?? _slivered(SizedBox(height: 128, child: _ErrorWidget(snapshot.error!)));
         } else if (snapshot.hasData) {
-          if (snapshot.data is Map && (snapshot.data as Map).isEmpty || snapshot.data is List && (snapshot.data as List).isEmpty) {
+          if (snapshot.data == null || snapshot.data is Map && (snapshot.data as Map).isEmpty || snapshot.data is List && (snapshot.data as List).isEmpty) {
             return emptyBuilder?.call(context) ?? _slivered(Container());
           } else {
             return builder(context, snapshot.data as T);
@@ -254,7 +254,7 @@ class _FutureBuilder<T> extends StatelessWidget {
 }
 
 class _StreamBuilder<T> extends StatelessWidget {
-  final Stream<T> stream;
+  final Stream<T?> stream;
   final T? seed;
   final TypedWidgetBuilder<T> builder;
   final WidgetBuilder? loadingBuilder;
@@ -274,7 +274,7 @@ class _StreamBuilder<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<T>(
+    return StreamBuilder<T?>(
       stream: seed != null ? stream.startWith(seed as T) : stream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -282,7 +282,7 @@ class _StreamBuilder<T> extends StatelessWidget {
         } else if (snapshot.hasError) {
           return errorBuilder?.call(context, snapshot.error) ?? _slivered(SizedBox(height: 128, child: _ErrorWidget(snapshot.error!)));
         } else if (snapshot.hasData) {
-          if (snapshot.data is Map && (snapshot.data as Map).isEmpty || snapshot.data is List && (snapshot.data as List).isEmpty) {
+          if (snapshot.data == null || snapshot.data is Map && (snapshot.data as Map).isEmpty || snapshot.data is List && (snapshot.data as List).isEmpty) {
             return emptyBuilder?.call(context) ?? _slivered(Container());
           } else {
             return builder(context, snapshot.data as T);
