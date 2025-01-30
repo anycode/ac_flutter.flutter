@@ -10,12 +10,11 @@ class AcDebugView extends StatelessWidget {
   final DebugLogger debugLogger;
 
   const AcDebugView({super.key, required this.debugLogger});
-  
+
   @override
   Widget build(BuildContext context) {
     return kIsWeb ? _AcDebugViewWeb(debugLogger) : _AcDebugViewNative(debugLogger: debugLogger);
   }
-
 }
 
 class _AcDebugViewNative extends StatefulWidget {
@@ -28,6 +27,21 @@ class _AcDebugViewNative extends StatefulWidget {
 }
 
 class _AcDebugViewNativeState extends State<_AcDebugViewNative> {
+  final ScrollController _controller = ScrollController();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration(milliseconds: 200)).then((_) {
+        if (_controller.hasClients) {
+          _controller.jumpTo(_controller.position.maxScrollExtent);
+          //_controller.animateTo(_controller.position.maxScrollExtent, duration: Duration(milliseconds: 333), curve: Curves.easeIn);
+        }
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,6 +52,7 @@ class _AcDebugViewNativeState extends State<_AcDebugViewNative> {
               future: widget.debugLogger.output!.content,
               builder: (context, data) {
                 return ListView.builder(
+                  controller: _controller,
                   itemCount: data.length,
                   itemBuilder: (context, index) => Text(data[index], softWrap: false),
                 );
@@ -50,6 +65,7 @@ class _AcDebugViewNativeState extends State<_AcDebugViewNative> {
             widget.debugLogger.output!.clearLog();
             setState(() {});
           },
+          logName: widget.debugLogger.name,
         ),
       ],
     );
