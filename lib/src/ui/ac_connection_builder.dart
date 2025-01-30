@@ -1,8 +1,8 @@
-import 'package:ac_flutter/src/ui/widgets/ac_loader.dart';
 import 'package:cross_connectivity/cross_connectivity.dart';
 import 'package:flutter/material.dart';
 
-import 'widgets/ac_widget_builder.dart';
+import 'ac_loader.dart';
+import 'ac_widget_builder.dart';
 
 class AcConnectionBuilder extends StatelessWidget {
   final TypedWidgetBuilder<ConnectivityStatus?> builder;
