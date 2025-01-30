@@ -1,11 +1,13 @@
+import 'package:ac_flutter/src/ui/ac_dialogs.dart';
 import 'package:flutter/material.dart';
 
 class AcDebugBottomBar extends StatelessWidget {
   final VoidCallback? onShare;
   final VoidCallback? onCopy;
   final VoidCallback? onDelete;
+  final String logName;
 
-  const AcDebugBottomBar({super.key, this.onShare, this.onCopy, this.onDelete});
+  const AcDebugBottomBar({super.key, this.onShare, this.onCopy, this.onDelete, required this.logName});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class AcDebugBottomBar extends StatelessWidget {
             BottomNavigationBarItem(icon: Icon(Icons.content_copy), label: 'Do schránky', backgroundColor: Colors.white),
             BottomNavigationBarItem(icon: Icon(Icons.delete), label: 'Smazat', backgroundColor: Colors.white),
           ],
-          onTap: (idx) {
+          onTap: (idx) async {
             switch (idx) {
               case 0:
                 onShare?.call();
@@ -34,7 +36,16 @@ class AcDebugBottomBar extends StatelessWidget {
                 onCopy?.call();
                 break;
               case 2:
-                onDelete?.call();
+                final bool? delete = await showAcConfirmDialog(
+                  context: context,
+                  title: 'Delete logs',
+                  message: 'Are you sure you want to delete all $logName logs?',
+                  confirmText: 'Delete',
+                  cancelText: 'Cancel',
+                );
+                if (delete == true) {
+                  onDelete?.call();
+                }
                 break;
             }
           },
