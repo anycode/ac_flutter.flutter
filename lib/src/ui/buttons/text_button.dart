@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../extensions/alignment_ext.dart';
+import '../../extensions/alignment_ext.dart';
 
-class AcOutlinedButton extends MaterialButton {
+class AcTextButton extends MaterialButton {
   final String? title;
   final TextStyle? textStyle;
   final Widget? icon;
@@ -14,7 +14,7 @@ class AcOutlinedButton extends MaterialButton {
   @override
   final OutlinedBorder? shape;
 
-  const AcOutlinedButton({
+  const AcTextButton({
     super.onPressed,
     this.title,
     this.textStyle,
@@ -33,29 +33,23 @@ class AcOutlinedButton extends MaterialButton {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = textColor ?? textStyle?.color ?? theme.buttonTheme.getTextColor(this);
+    final tColor = textColor ?? textStyle?.color ?? theme.buttonTheme.getTextColor(this);
     final size = iconSize ?? textStyle?.fontSize ?? theme.textTheme.titleMedium?.fontSize ?? 12.0;
     final ic = icon ??
         (iconData != null
             ? Icon(
                 iconData,
-                color: color,
+                color: tColor,
                 size: size,
               )
             : svgAsset != null
                 ? SvgPicture.asset(
                     svgAsset!,
-                    colorFilter: ColorFilter.mode(color, BlendMode.color),
+                    colorFilter: ColorFilter.mode(tColor, BlendMode.color),
                     height: size,
                   )
                 : null);
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-        shape: shape ?? RoundedRectangleBorder(borderRadius: BorderRadius.circular(padding?.horizontal ?? 8.0)),
-        side: BorderSide(color: color),
-        textStyle: TextStyle(color: color),
-        foregroundColor: color,
-      ),
+    return TextButton(
       onPressed: onPressed,
       child: Padding(
         padding: padding ??
@@ -76,6 +70,7 @@ class AcOutlinedButton extends MaterialButton {
               ),
             if (ic != null && (iconAlignment?.isRight ?? false) && title != null) SizedBox(width: padding?.horizontal ?? 8.0),
             if (ic != null && (iconAlignment?.isRight ?? false)) ic,
+            if (ic != null && (iconAlignment?.isRight ?? true) && title != null) SizedBox(width: padding?.horizontal ?? 8.0),
           ],
         ),
       ),

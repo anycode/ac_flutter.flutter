@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../extensions/alignment_ext.dart';
+import '../../extensions/alignment_ext.dart';
 
 class AcActionButton extends MaterialButton {
   final Widget? icon;
