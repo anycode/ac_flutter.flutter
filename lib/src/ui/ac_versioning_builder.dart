@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:version_banner/version_banner.dart';
 
-import 'widgets/ac_loading_builder.dart';
-import 'widgets/ac_widget_builder.dart';
+import 'ac_loading_builder.dart';
+import 'ac_widget_builder.dart';
 
 /// Callback builder which is called when current app version is lower than
 /// minimal (required) version
