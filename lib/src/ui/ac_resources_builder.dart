@@ -18,7 +18,7 @@ final class AcLocalization {
     if (state == null) {
       throw FlutterError(
         'AcLocalization operation requested with a context that does not include a AcResourcesBuilder.\n'
-            'The context used must be that of a widget that is a descendant of a AcResourcesBuilder widget.',
+        'The context used must be that of a widget that is a descendant of a AcResourcesBuilder widget.',
       );
     }
     return state;
@@ -28,7 +28,7 @@ final class AcLocalization {
 class AcResourcesBuilder<RES extends AcResources> extends StatefulWidget {
   /// [child] is used as optional static widget passed to [builder]
   final Widget? child;
-  
+
   /// [builder] is called when resources are available
   final AcResourcesWidgetBuilder<RES> builder;
 
@@ -43,7 +43,6 @@ class AcResourcesBuilder<RES extends AcResources> extends StatefulWidget {
 
   @override
   AcResourcesBuilderState createState() => AcResourcesBuilderState<RES>();
-
 }
 
 class AcResourcesBuilderState<RES extends AcResources> extends State<AcResourcesBuilder<RES>> {
@@ -86,10 +85,10 @@ class AcResourcesBuilderState<RES extends AcResources> extends State<AcResources
     /// possible to call [Resources res = Resources.of(context);] in build()
     /// as it returns null in this widget. It works in other widgets in
     /// the subtree.
-    AcResources.delegate.load(locale).then((res) => setState(() {
-          _resources.add(res as RES);
-          _locale = locale;
-        }));
+    AcResources.delegate.load(locale).then((res) {
+      _resources.add(res as RES);
+      _locale = locale;
+    });
   }
 
   @override
@@ -100,5 +99,4 @@ class AcResourcesBuilderState<RES extends AcResources> extends State<AcResources
       loadingBuilder: widget.loadingBuilder,
     );
   }
-
 }
