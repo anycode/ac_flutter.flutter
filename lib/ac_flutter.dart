@@ -9,6 +9,7 @@ export 'src/extensions/datetimerange_ext.dart';
 export 'src/extensions/google_map_latlng_ext.dart';
 export 'src/extensions/string_ext.dart';
 export 'src/res/ac_resources.dart';
+export 'src/router/ac_router.dart';
 export 'src/ui/ac_connection_builder.dart';
 export 'src/ui/ac_dialogs.dart';
 export 'src/ui/ac_resources_builder.dart';
