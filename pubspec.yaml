@@ -12,6 +12,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  ac_api_client:
+    version: ^0.1.4
+    hosted: https://pub.anycode.dev
   ac_dart:
     version: ^0.1.12
     hosted: https://pub.anycode.dev

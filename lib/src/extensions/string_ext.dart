@@ -20,12 +20,17 @@ extension StringExt on String {
   /// final String heroRoute = dashboardRoute.applyRouteArgs({'pid': 'hero'}) // result route is /hero/dashboard
   /// final String baseRoute = dashboardRoute.applyRouteArgs({'pid': null}) // result route is /dashboard
   /// ```
-  String applyRouteArgs(Map<String, dynamic> map) => replaceAllMapped(RegExp(r'(\[(.*?))?:(\w+)((.*?)\])?'),
-      (match) => map.containsKey(match[3]) && map[match[3]] != null ? '${match[2] ?? ''}${map[match[3]].toString()}${match[5] ?? ''}' : '');
+  String applyRouteArgs(Map<String, dynamic>? map) {
+    if (map == null) return this;
+    return replaceAllMapped(
+        RegExp(r'(\[(.*?))?:(\w+)((.*?)\])?'),
+        (match) =>
+            map.containsKey(match[3]) && map[match[3]] != null ? '${match[2] ?? ''}${map[match[3]].toString()}${match[5] ?? ''}' : '');
+  }
 
   /// Creates regexp from route string with placeholders which can be then used
   /// for matching routes and routing. Resulting regexp contains groups named by
-  /// placeholders
+  /// placeholders. If route does not contain placeholders, returns null.
   ///
   /// ```dart
   /// static const String dashboard = '[/:pid]/dashboard';
@@ -44,9 +49,9 @@ extension StringExt on String {
   ///    ...
   ///  }
   ///```
-  RegExp get routeRegExp {
+  RegExp? get routeRegExp {
     String re = replaceAllMapped(RegExp(r'\[(.*?):(\w+)(.*?)\]'), (match) => '(${match[1] ?? ''}(?<${match[2]}>[^/]+)${match[3] ?? ''})?')
         .replaceAllMapped(RegExp(r':(\w+)'), (match) => '(?<${match[1]}>[^/]+)');
-    return RegExp('^$re\$');
+    return re == this ? null : RegExp('^$re\$');
   }
 }

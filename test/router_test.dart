@@ -8,7 +8,7 @@ void main() {
     expect(vehicles.applyRouteArgs({'pid': null}), '/vehicles');
     expect(vehicles.applyRouteArgs({}), '/vehicles');
 
-    final RegExp vehiclesRe = vehicles.routeRegExp;
+    final RegExp vehiclesRe = vehicles.routeRegExp!;
     expect(vehiclesRe.hasMatch('/vehicles'), true);
     expect(vehiclesRe.hasMatch('//vehicles'), false);
     expect(vehiclesRe.hasMatch('/dphlmp/vehicles'), true);
