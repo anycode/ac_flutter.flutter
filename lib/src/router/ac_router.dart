@@ -1,6 +1,9 @@
 import 'package:ac_flutter/src/extensions/string_ext.dart';
 import 'package:flutter/material.dart';
 
+/// Type of route transition
+enum TransitionType { fade, slide, dialog }
+
 /// Callback builder which is called when route is found and should be built.
 /// The builder will get build context and [AcRouterState] which holds the
 /// route, uri and path parameters
@@ -14,7 +17,7 @@ typedef AcRouterWidgetBuilder = Widget Function(
 /// The arguments are created internally when calling [AcRouterBuildContextExt.go] or [AcRouterBuildContextExt.push].
 /// See [AcRouterBuildContextExt]
 class AcRouteArgs {
-  final Map<String, String>? pathParameters;
+  final Map<String, dynamic>? pathParameters;
   final Map<String, dynamic>? queryParameters;
   final dynamic arguments;
 
@@ -35,28 +38,73 @@ class AcRouteArgs {
 ///
 /// [builder] is the callback which is called when route is found and should be built
 ///
-class AcRoute {
+/// [transitionType] is the type of route transition, defaults to [TransitionType.fade],
+/// other options are [TransitionType.slide] and [TransitionType.dialog]
+class AcRoute<T> {
   final String path;
   final String name;
   final AcRouterWidgetBuilder builder;
+  final TransitionType transitionType;
   final RegExp? _pathRegExp;
+  final bool dlgFullScreen;
+  final bool dlgOpaque;
+  final Color? dlgBarrierColor;
+  final bool dlgBarrierDismissible;
+  final Type type = T;
 
-  AcRoute({required this.path, String? name, required this.builder})
-      : name = name ?? path,
+  AcRoute._({
+    required this.path,
+    String? name,
+    required this.builder,
+    this.transitionType = TransitionType.fade,
+    this.dlgFullScreen = false,
+    this.dlgOpaque = true,
+    this.dlgBarrierColor,
+    this.dlgBarrierDismissible = true,
+  })  : name = name ?? path,
         _pathRegExp = path.routeRegExp;
+
+  AcRoute({required String path, String? name, required AcRouterWidgetBuilder builder})
+      : this._(path: path, name: name, builder: builder, transitionType: TransitionType.fade);
+
+  AcRoute.slide({required String path, String? name, required AcRouterWidgetBuilder builder})
+      : this._(path: path, name: name, builder: builder, transitionType: TransitionType.slide);
+
+  AcRoute.dialog({
+    required String path,
+    String? name,
+    required AcRouterWidgetBuilder builder,
+    bool fullScreen = true,
+    bool opaque = true,
+    Color? barrierColor,
+    bool barrierDismissible = true,
+  }) : this._(
+          path: path,
+          name: name,
+          builder: builder,
+          transitionType: TransitionType.dialog,
+          dlgFullScreen: fullScreen,
+          dlgOpaque: opaque,
+          dlgBarrierColor: barrierColor,
+          dlgBarrierDismissible: barrierDismissible,
+        );
 
   @override
   String toString() => 'Route{name: $name, path: $path, builder: $builder}';
 }
 
 /// State of the router passed to [AcRouterWidgetBuilder]. The state contains
-/// the route, uri and path parameters after applying route arguments
+/// the route, uri, path parameters after applying route arguments and
+/// extra arguments passed to routing methods
 class AcRouterState {
   final AcRoute route;
   final Uri uri;
   final Map<String, String> pathParameters;
+  final dynamic arguments;
 
-  AcRouterState({required this.route, required this.uri, this.pathParameters = const {}});
+  AcRouterState({required this.route, required this.uri, this.pathParameters = const {}, this.arguments});
+
+  T? getArgumentAs<T>() => arguments as T?;
 }
 
 /// Router which uses [AcRoute]s to define routes. It's [generateRoute] method is to be
@@ -70,11 +118,13 @@ class AcRouter {
   AcRouter({required this.routes, AcRouterWidgetBuilder? missingBuilder})
       : missing = AcRoute(path: '', builder: missingBuilder ?? routes.first.builder);
 
-  Route<dynamic>? generateRoute(RouteSettings settings) {
+  Route<T>? generateRoute<T>(RouteSettings settings) {
     var uri = Uri.parse(settings.name!);
     var pathParameters = const <String, String>{};
+    var arguments = settings.arguments;
     if (settings.arguments != null && settings.arguments is AcRouteArgs) {
       final args = settings.arguments as AcRouteArgs;
+      arguments = args.arguments;
       if (args.queryParameters?.isNotEmpty == true) {
         uri = uri.replace(queryParameters: args.queryParameters);
       }
@@ -88,7 +138,7 @@ class AcRouter {
         // simple path without placeholders
         return r.path == settings.name;
       }
-      if(r._pathRegExp!.hasMatch(uri.path)) {
+      if (r._pathRegExp!.hasMatch(uri.path)) {
         // path with placeholders matched
         final m = r._pathRegExp!.firstMatch(uri.path);
         if (m != null) {
@@ -101,8 +151,13 @@ class AcRouter {
       }
     }, orElse: () => missing);
     debugPrint('router match: $route');
-    final routerState = AcRouterState(route: route, uri: uri, pathParameters: pathParameters);
-    return _FadeRoute(routerState, settings: settings);
+    final routerState = AcRouterState(route: route, uri: uri, pathParameters: pathParameters, arguments: arguments);
+    final type = route.type;
+    return switch (route.transitionType) {
+      TransitionType.fade => _FadeRoute<T>(routerState, settings: settings),
+      TransitionType.slide => _SlideRightRoute<T>(routerState, settings: settings),
+      TransitionType.dialog => _DialogRoute<T>(routerState, settings: settings),
+    };
   }
 }
 
@@ -130,7 +185,6 @@ class _FadeRoute<T> extends PageRouteBuilder<T> {
         );
 }
 
-// ignore: unused_element
 class _SlideRightRoute<T> extends PageRouteBuilder<T> {
   final AcRouterState routerState;
 
@@ -159,13 +213,15 @@ class _SlideRightRoute<T> extends PageRouteBuilder<T> {
         );
 }
 
-// ignore: unused_element
 class _DialogRoute<T> extends PageRouteBuilder<T> {
   final AcRouterState routerState;
 
   _DialogRoute(this.routerState, {super.settings, super.maintainState})
       : super(
-          fullscreenDialog: true,
+          fullscreenDialog: routerState.route.dlgFullScreen,
+          opaque: routerState.route.dlgOpaque,
+          barrierColor: routerState.route.dlgBarrierColor,
+          barrierDismissible: routerState.route.dlgBarrierDismissible,
           pageBuilder: (
             BuildContext context,
             Animation<double> animation,
@@ -198,31 +254,31 @@ class _DialogRoute<T> extends PageRouteBuilder<T> {
 extension AcRouterBuildContextExt on BuildContext {
   NavigatorState get navigator => Navigator.of(this);
 
-  /// Go to route with arguments, replaces the whole stack with this route
-  Future<T?> go<T>(String route,
-      {Map<String, String>? pathParameters,
-        Map<String, dynamic>? queryParameters,
-        Object? extra}) =>
+  /// Go to route with arguments, replaces the whole stack with this route.
+  ///
+  /// Generic type T is discarded intentionally and not passed to `pushNamedAndRemoveUntil()`
+  /// because it makes a mess with the return type from `generateRoute` which is always `dynamic`
+  Future<dynamic> go<T>(String route, {Map<String, dynamic>? pathParameters, Map<String, dynamic>? queryParameters, Object? extra}) =>
       navigator.pushNamedAndRemoveUntil(route.applyRouteArgs(pathParameters), (r) => false,
           arguments: AcRouteArgs(queryParameters: queryParameters, pathParameters: pathParameters, arguments: extra));
 
-  /// Push new route with arguments to the stack
-  Future<T?> push<T>(String route,
-      {Map<String, String>? pathParameters,
-        Map<String, dynamic>? queryParameters,
-        Object? extra}) =>
+  /// Push new route with arguments to the stack.
+  ///
+  /// Generic type T is discarded intentionally and not passed to `pushNamed()`
+  /// because it makes a mess with the return type from `generateRoute` which is always `dynamic`
+  Future<dynamic> push<T>(String route, {Map<String, dynamic>? pathParameters, Map<String, dynamic>? queryParameters, Object? extra}) =>
       navigator.pushNamed(route.applyRouteArgs(pathParameters),
           arguments: AcRouteArgs(queryParameters: queryParameters, pathParameters: pathParameters, arguments: extra));
 
   /// Replace current route with new route with arguments on the stack
-  Future<T?> pushReplacement<T>(String route,
-      {Map<String, String>? pathParameters,
-        Map<String, dynamic>? queryParameters,
-        Object? extra}) =>
+  ///
+  /// Generic types T and TO is discarded intentionally and not passed to `pushReplacementNamed()`
+  /// because it makes a mess with the return type from `generateRoute` which is always `dynamic`
+  Future<dynamic> pushReplacement<T, TO>(String route,
+          {Map<String, dynamic>? pathParameters, Map<String, dynamic>? queryParameters, Object? extra}) =>
       navigator.pushReplacementNamed(route.applyRouteArgs(pathParameters),
           arguments: AcRouteArgs(queryParameters: queryParameters, pathParameters: pathParameters, arguments: extra));
 
   /// Pop route from the stack
   void pop<T>([T? value]) => navigator.pop<T>(value);
 }
-
