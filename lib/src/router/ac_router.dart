@@ -53,10 +53,10 @@ class AcRoute {
 /// the route, uri and path parameters after applying route arguments
 class AcRouterState {
   final AcRoute route;
-  final Uri? uri;
+  final Uri uri;
   final Map<String, String> pathParameters;
 
-  AcRouterState({required this.route, this.uri, this.pathParameters = const {}});
+  AcRouterState({required this.route, required this.uri, this.pathParameters = const {}});
 }
 
 /// Router which uses [AcRoute]s to define routes. It's [generateRoute] method is to be
@@ -212,6 +212,14 @@ extension AcRouterBuildContextExt on BuildContext {
         Map<String, dynamic>? queryParameters,
         Object? extra}) =>
       navigator.pushNamed(route.applyRouteArgs(pathParameters),
+          arguments: AcRouteArgs(queryParameters: queryParameters, pathParameters: pathParameters, arguments: extra));
+
+  /// Replace current route with new route with arguments on the stack
+  Future<T?> pushReplacement<T>(String route,
+      {Map<String, String>? pathParameters,
+        Map<String, dynamic>? queryParameters,
+        Object? extra}) =>
+      navigator.pushReplacementNamed(route.applyRouteArgs(pathParameters),
           arguments: AcRouteArgs(queryParameters: queryParameters, pathParameters: pathParameters, arguments: extra));
 
   /// Pop route from the stack
