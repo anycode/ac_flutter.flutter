@@ -152,7 +152,6 @@ class AcRouter {
     }, orElse: () => missing);
     debugPrint('router match: $route');
     final routerState = AcRouterState(route: route, uri: uri, pathParameters: pathParameters, arguments: arguments);
-    final type = route.type;
     return switch (route.transitionType) {
       TransitionType.fade => _FadeRoute<T>(routerState, settings: settings),
       TransitionType.slide => _SlideRightRoute<T>(routerState, settings: settings),

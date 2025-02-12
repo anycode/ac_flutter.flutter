@@ -23,9 +23,8 @@ extension StringExt on String {
   String applyRouteArgs(Map<String, dynamic>? map) {
     if (map == null) return this;
     return replaceAllMapped(
-        RegExp(r'(\[(.*?))?:(\w+)((.*?)\])?'),
-        (match) =>
-            map.containsKey(match[3]) && map[match[3]] != null ? '${match[2] ?? ''}${map[match[3]].toString()}${match[5] ?? ''}' : '');
+        RegExp(r'(?:\[([^:]*?))?:(\w+)(?:([^\[\]]*?)\])?'),
+        (match) => map.containsKey(match[2]) && map[match[2]] != null ? '${match[1] ?? ''}${map[match[2]].toString()}${match[3] ?? ''}' : '');
   }
 
   /// Creates regexp from route string with placeholders which can be then used
