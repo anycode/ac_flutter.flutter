@@ -8,6 +8,7 @@ class AcLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const CircularProgressIndicator(),
         if (title != null) Text(title!),
