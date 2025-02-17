@@ -18,6 +18,7 @@ export 'src/ui/ac_loader.dart';
 export 'src/ui/ac_loading_builder.dart';
 export 'src/ui/ac_oauth2_builder.dart';
 export 'src/ui/ac_package_info_builder.dart';
+export 'src/ui/ac_scaffold.dart';
 export 'src/ui/ac_theme_builder.dart';
 export 'src/ui/ac_theme_widgets.dart';
 export 'src/ui/ac_widget_builder.dart';
