@@ -2,7 +2,7 @@ import 'package:ac_flutter/src/extensions/string_ext.dart';
 import 'package:flutter/material.dart';
 
 /// Type of route transition
-enum TransitionType { fade, slide, dialog }
+enum TransitionType { platform, fade, slide, dialog }
 
 /// Callback builder which is called when route is found and should be built.
 /// The builder will get build context and [AcRouterState] which holds the
@@ -64,12 +64,20 @@ class AcRoute<T> {
   })  : name = name ?? path,
         _pathRegExp = path.routeRegExp;
 
+  /// Uses default (platform specific) transition, depends on setting of [PageTransitionsTheme]
+  /// See https://main-api.flutter.dev/flutter/material/PageTransitionsTheme-class.html
   AcRoute({required String path, String? name, required AcRouterWidgetBuilder builder})
+      : this._(path: path, name: name, builder: builder, transitionType: TransitionType.platform);
+
+  /// Use fade transition
+  AcRoute.fade({required String path, String? name, required AcRouterWidgetBuilder builder})
       : this._(path: path, name: name, builder: builder, transitionType: TransitionType.fade);
 
+  /// Use left-right slide transition
   AcRoute.slide({required String path, String? name, required AcRouterWidgetBuilder builder})
       : this._(path: path, name: name, builder: builder, transitionType: TransitionType.slide);
 
+  /// Use down-up slide transition for full screen modals
   AcRoute.dialog({
     required String path,
     String? name,
@@ -153,6 +161,8 @@ class AcRouter {
     debugPrint('router match: $route');
     final routerState = AcRouterState(route: route, uri: uri, pathParameters: pathParameters, arguments: arguments);
     return switch (route.transitionType) {
+      TransitionType.platform =>
+        MaterialPageRoute<T>(builder: (context) => routerState.route.builder(context, routerState), settings: settings),
       TransitionType.fade => _FadeRoute<T>(routerState, settings: settings),
       TransitionType.slide => _SlideRightRoute<T>(routerState, settings: settings),
       TransitionType.dialog => _DialogRoute<T>(routerState, settings: settings),
