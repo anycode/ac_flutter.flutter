@@ -15,9 +15,9 @@ Future showAcAlertDialog({
   Offset? anchorPoint,
   TraversalEdgeBehavior? traversalEdgeBehavior,
 }) {
-  return showDialog(
+  return showAdaptiveDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => AlertDialog.adaptive(
             title: Text(title),
             content: content ?? Text(message),
             actions: [TextButton(onPressed: () => Navigator.pop(context, true), child: Text(buttonText))],
@@ -48,9 +48,9 @@ Future<bool?> showAcConfirmDialog({
   Offset? anchorPoint,
   TraversalEdgeBehavior? traversalEdgeBehavior,
 }) {
-  return showDialog<bool>(
+  return showAdaptiveDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => AlertDialog.adaptive(
             title: Text(title),
             content: content ?? Text(message),
             actions: [
