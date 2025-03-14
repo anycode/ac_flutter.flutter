@@ -41,6 +41,7 @@ dependencies:
   version_banner:
     version: ^2.0.3
     hosted: https://pub.anycode.dev
+  web: ^1.1.1
   webview_flutter: ^4.10.0
   webview_flutter_web: ^0.2.3+4
 

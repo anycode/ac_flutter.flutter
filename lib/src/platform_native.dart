@@ -23,6 +23,4 @@ Future<String?> getLogPath(String root, String path) async {
   }
 }
 
-File file(String path) {
-  return File(path);
-}
+File file(String path) => File(path);
