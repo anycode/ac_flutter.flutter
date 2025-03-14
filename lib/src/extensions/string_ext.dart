@@ -1,8 +1,6 @@
 import 'dart:ui';
 
 extension StringExt on String {
-  String get capitalize => '${this[0].toUpperCase()}${substring(1)}';
-
   /// Parse string as [Color], input can be #AARRGGBB, #RRGGBB, AARRGGBB, RRGGBB
   Color get color {
     final buffer = StringBuffer();
