@@ -6,17 +6,17 @@ import 'ac_widget_builder.dart';
 
 typedef _Stream<T> = Stream<T> Function(T fetched);
 
-/// [AcLoadingBuilder] allow fetching data asynchronously from a [Future]<T> or a [Stream]<T>.
+/// [AcLoadingBuilder] allow fetching data asynchronously from a [Future]`<T>` or a [Stream]`<T>`.
 /// When [future] is specified, [stream] must be null or a function which takes a
-/// value obtained from [future] and returns a [Stream]<T>.
-/// When [future] is null, [stream] must be a [Stream]<T>.
+/// value obtained from [future] and returns a [Stream]`<T>`.
+/// When [future] is null, [stream] must be a [Stream]`<T>`.
 /// Use [AcSliverLoadingBuilder] if you need to use it in slivers.
 class AcLoadingBuilder<T> extends StatelessWidget {
-  /// [future] is a [Future]<T?> whose value is passed to [builder] (if [stream] is null) or as
-  /// a seed value to [stream] which must be [Stream<T> Function(T seed)]
+  /// [future] is a [Future]`<T?>` whose value is passed to [builder] (if [stream] is null) or as
+  /// a seed value to [stream] which must be [Stream`<T>` Function(T seed)]
   final Future<T?>? future;
 
-  /// [stream] is either a [Stream]<T> (if [future] is null) or a [Stream<T> Function(T seed)]
+  /// [stream] is either a [Stream]`<T>` (if [future] is null) or a [Stream`<T>` Function(T seed)]
   /// seeded by a value from [future] (if [future] is not null)
   final dynamic stream;
 
@@ -94,17 +94,17 @@ class AcLoadingBuilder<T> extends StatelessWidget {
   }
 }
 
-/// [AcSliverLoadingBuilder] allow fetching data asynchronously from a [Future]<T> or a [Stream]<T>.
+/// [AcSliverLoadingBuilder] allow fetching data asynchronously from a [Future]`<T>` or a [Stream]`<T>`.
 /// It has the very same functionality as [AcLoadingBuilder] but it's suitable for use in slivers.
 /// When [future] is specified, [stream] must be null or a function which takes a
-/// value obtained from [future] and returns a [Stream]<T>.
-/// When [future] is null, [stream] must be a [Stream]<T>.
+/// value obtained from [future] and returns a [Stream]`<T>`.
+/// When [future] is null, [stream] must be a [Stream]`<T>`.
 class AcSliverLoadingBuilder<T> extends StatelessWidget {
-  /// [future] is a [Future]<T> whose value is passed to [builder] (if [stream] is null) or as
-  /// a seed value to [stream] which must be [Stream<T> Function(T seed)]
+  /// [future] is a [Future]`<T>` whose value is passed to [builder] (if [stream] is null) or as
+  /// a seed value to [stream] which must be [Stream`<T>` Function(T seed)]
   final Future<T>? future;
 
-  /// [stream] is either a [Stream]<T> (if [future] is null) of a [Stream<T> Function(T seed)]
+  /// [stream] is either a [Stream]`<T>` (if [future] is null) of a [Stream<T> Function(T seed)]
   /// seeded by a value from [future] (if [future] is not null)
   final dynamic stream;
 
