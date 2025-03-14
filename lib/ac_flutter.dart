@@ -1,12 +1,15 @@
 export 'package:ac_dart/ac_dart.dart';
+export 'package:logger/logger.dart' show Level;
 
 export 'src/converter/color_converter.dart';
 export 'src/debug/debug_service.dart';
 export 'src/extensions/alignment_ext.dart';
+export 'src/extensions/build_context_ext.dart';
 export 'src/extensions/color_ext.dart';
 export 'src/extensions/daterange_ext.dart';
 export 'src/extensions/datetimerange_ext.dart';
 export 'src/extensions/google_map_latlng_ext.dart';
+export 'src/extensions/scaffold_ext.dart';
 export 'src/extensions/string_ext.dart';
 export 'src/res/ac_resources.dart';
 export 'src/router/ac_router.dart';
@@ -23,5 +26,6 @@ export 'src/ui/ac_theme_builder.dart';
 export 'src/ui/ac_theme_widgets.dart';
 export 'src/ui/ac_widget_builder.dart';
 export 'src/ui/buttons/buttons.dart';
+export 'src/ui/widgets/textend.dart';
 export 'src/ui/debug/ac_debug_view.dart';
 export 'src/ui/debug/ac_tabbed_debugs_view.dart';
